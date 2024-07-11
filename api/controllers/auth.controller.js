@@ -1,7 +1,6 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
-import dotenv from "dotenv";
-dotenv.config();
+
 export const signup = async (req, res) => {
   const { username, email, password } = req.body;
   if (
@@ -14,8 +13,7 @@ export const signup = async (req, res) => {
   ) {
     return res.status(400).json({ msg: "all fields are required" });
   }
-  const saltRounds = parseInt(process.env.PASSSALT, 10);
-  const hashPassword = bcryptjs.hashSync(password, saltRounds);
+  const hashPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     username,
     email,
