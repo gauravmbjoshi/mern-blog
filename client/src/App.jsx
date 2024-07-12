@@ -6,6 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Header from "./components/Header";
+import FooterComponent from "./components/FooterComponent";
+import Tandc from "./pages/Tandc";
+import PvcPolc from "./pages/PvcPolc";
 function App() {
   return (
     <BrowserRouter>
@@ -41,7 +44,18 @@ function App() {
           path='/sign-in'
           element={<SignIn />}
         />
+        <Route
+          exact
+          path='/tandc'
+          element={<Tandc />}
+        />
+        <Route
+          exact
+          path='/pvcpolc'
+          element={<PvcPolc />}
+        />
       </Routes>
+      <FooterComponent />
     </BrowserRouter>
   );
 }
