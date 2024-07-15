@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import FooterComponent from "./components/FooterComponent";
 import Tandc from "./pages/Tandc";
 import PvcPolc from "./pages/PvcPolc";
+import PrivateRoute from "./components/PrivateRoute";
 function App() {
   return (
     <BrowserRouter>
@@ -29,11 +30,13 @@ function App() {
           path='/projects'
           element={<Projects />}
         />
-        <Route
-          exact
-          path='/dashboard'
-          element={<Dashboard />}
-        />
+        <Route element={<PrivateRoute />}>
+          <Route
+            exact
+            path='/dashboard'
+            element={<Dashboard />}
+          />
+        </Route>
         <Route
           exact
           path='/sign-up'
