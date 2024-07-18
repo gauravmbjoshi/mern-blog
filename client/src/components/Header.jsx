@@ -13,6 +13,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
+import userAvatar from "../../public/userAvatar.webp";
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
@@ -58,7 +59,7 @@ export default function Header() {
             label={
               <Avatar
                 alt='User Avatar'
-                img={currentUser.profilePicture}
+                img={currentUser.profilePicture || userAvatar}
               ></Avatar>
             }
           >
