@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
       default:
-        "https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=",
+        "https://media.istockphoto.com/id/1434117817/vector/account-avatar-pixel-perfect-flat-gradient-two-color-ui-icon.jpg?s=612x612&w=0&k=20&c=16IxOGq5lWf-nOO2_qabzd-CyXeu57nNoRjt8AZBkB0=",
     },
   },
   { timestamps: true }

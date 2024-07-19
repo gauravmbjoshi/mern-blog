@@ -13,7 +13,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
-import userAvatar from "../../public/userAvatar.webp";
+import userAvatar from "../../public/userAvatar.jpg";
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
@@ -46,11 +46,11 @@ export default function Header() {
       </Button>
       <div className='flex gap-2 md:order-2'>
         <Button
-          className='w-12 h-10 hidden sm:inline'
+          className='w-12 h-10 hidden shadow-none outline-none sm:inline rounded-full '
           color='gray'
           onClick={() => dispatch(toggleTheme())}
         >
-          {theme === "light" ? <FaSun /> : <FaMoon />}
+          {theme === "light" ? <FaSun size={20} /> : <FaMoon size={20} />}
         </Button>
         {currentUser ? (
           <Dropdown
@@ -58,6 +58,7 @@ export default function Header() {
             inline
             label={
               <Avatar
+                rounded
                 alt='User Avatar'
                 img={currentUser.profilePicture || userAvatar}
               ></Avatar>
