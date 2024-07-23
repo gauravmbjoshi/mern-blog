@@ -10,6 +10,8 @@ import FooterComponent from "./components/FooterComponent";
 import Tandc from "./pages/Tandc";
 import PvcPolc from "./pages/PvcPolc";
 import PrivateRoute from "./components/PrivateRoute";
+import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
+import CreatePost from "./pages/CreatePost";
 function App() {
   return (
     <BrowserRouter>
@@ -35,6 +37,13 @@ function App() {
             exact
             path='/dashboard'
             element={<Dashboard />}
+          />
+        </Route>
+        <Route element={<PrivateRouteAdmin />}>
+          <Route
+            exact
+            path='/create-post'
+            element={<CreatePost />}
           />
         </Route>
         <Route

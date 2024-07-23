@@ -5,6 +5,7 @@ import userAvatar from "../../public/userAvatar.jpg";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -23,7 +24,7 @@ import {
 } from "../redux/user/userSlice.js";
 import { useDispatch } from "react-redux";
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadingProgress] =
@@ -181,7 +182,7 @@ export default function DashProfile() {
           hidden
         />
         <div
-          className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full cursor-pointer'
+          className='relative w-32 h-32 self-center shadow-md overflow-hidden rounded-full cursor-pointer'
           onClick={() => {
             filePiclerRefrance.current.click();
           }}
@@ -242,12 +243,24 @@ export default function DashProfile() {
           onChange={handleChange}
         ></TextInput>
         <Button
-          type='sublit'
+          type='submit'
           gradientDuoTone='purpleToBlue'
           outline
+          disabled={loading || imageFileUploading}
         >
-          Update
+          {loading ? "Loading..." : "Update"}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type='button'
+              gradientDuoTone='purpleToPink'
+              className='w-full'
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className='flex justify-between text-red-500 mt-5'>
         <span
