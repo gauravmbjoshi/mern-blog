@@ -1,9 +1,10 @@
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, TextInput, Modal, ModalHeader } from "flowbite-react";
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import userAvatar from "../../public/userAvatar.jpg";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import {
   getDownloadURL,
   getStorage,
@@ -15,10 +16,13 @@ import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice.js";
 import { useDispatch } from "react-redux";
 export default function DashProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadingProgress] =
@@ -27,6 +31,7 @@ export default function DashProfile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
+  const [showModel, setShowModel] = useState(false);
   const [formData, setFormData] = useState({});
   const filePiclerRefrance = useRef();
   const dispatch = useDispatch();
@@ -128,6 +133,25 @@ export default function DashProfile() {
       setUpdateUserError(res.message);
     }
   };
+  const handleDeleteAccount = async () => {
+    setShowModel(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure("Failed to delete account"));
+      } else {
+        dispatch(deleteUserSuccess());
+      }
+      // sign out user from firebase
+      app.auth().signOut();
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -212,7 +236,14 @@ export default function DashProfile() {
         </Button>
       </form>
       <div className='flex justify-between text-red-500 mt-5'>
-        <span className='cursor-pointer '>Delete Account</span>
+        <span
+          className='cursor-pointer '
+          onClick={() => {
+            setShowModel(true);
+          }}
+        >
+          Delete Account
+        </span>
         <span className='cursor-pointer  '>Sign Out</span>
       </div>
       {updateUserSuccess && (
@@ -231,6 +262,50 @@ export default function DashProfile() {
           {updateUserError}
         </Alert>
       )}
+      {error && (
+        <Alert
+          color='failure'
+          className='mt-5'
+        >
+          {updateUserError}
+        </Alert>
+      )}
+      <Modal
+        show={showModel}
+        onClose={() => {
+          setShowModel(false);
+        }}
+        popup
+        size='md'
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className='text-center'>
+            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-600 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className='text-xl mb-5 font-semibold text-gray-600 dark:text-gray-200'>
+              Are you sure you want to delete your account?
+            </h3>
+            <div className='flex justify-between'>
+              <Button
+                color='failure'
+                onClick={handleDeleteAccount}
+                outline
+              >
+                Yes, I'm Sure
+              </Button>
+              <Button
+                gradientDuoTone='greenToBlue'
+                outline
+                onClick={() => {
+                  setShowModel(false);
+                }}
+              >
+                No, Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
