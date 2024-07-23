@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
       default:
         "https://media.istockphoto.com/id/1434117817/vector/account-avatar-pixel-perfect-flat-gradient-two-color-ui-icon.jpg?s=612x612&w=0&k=20&c=16IxOGq5lWf-nOO2_qabzd-CyXeu57nNoRjt8AZBkB0=",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
