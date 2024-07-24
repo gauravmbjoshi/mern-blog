@@ -1,4 +1,4 @@
-import { Button, FileInput, Select, TextInput } from "flowbite-react";
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -11,11 +11,14 @@ import {
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useNavigate } from "react-router-dom";
 export default function CreatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
+  const navigate = useNavigate();
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -52,14 +55,52 @@ export default function CreatePost() {
       console.error(error);
     }
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Send the form data to the server
+    try {
+      // Add the post to the database
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (data.message && data.message.includes("duplicate key")) {
+          setPublishError("Error: Title already exists. 😬");
+
+          // Optionally, you can throw a specific error or handle it differently
+        } else {
+          setPublishError(`Error: ${data.message}`);
+        }
+      }
+
+      if (res.ok) {
+        setPublishError(null);
+      }
+      // Redirect to the dashboard
+      navigate(`/post/${data.slug}`);
+    } catch (error) {
+      if (data.message && data.message.includes("duplicate key")) {
+        setPublishError("Error: Title already exists.");
+
+        // Optionally, you can throw a specific error or handle it differently
+      } else {
+        setPublishError(`Error: ${data.message}`);
+      }
+    }
+  };
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className=' text-3xl text-center my-7 font-semibold'>
         Create a post
       </h1>
       <form
-        action=''
         className='flex flex-col gap-4'
+        onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
@@ -68,8 +109,15 @@ export default function CreatePost() {
             required
             id='title'
             className='flex-1'
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
-          <Select>
+          <Select
+            onChange={(e) => {
+              setFormData({ ...formData, category: e.target.value });
+            }}
+          >
             <option value='uncategorized'>Select Category</option>
             <option value='technical'>Technical</option>
             <option value='nontechnical'>Non-Technical</option>
@@ -115,6 +163,7 @@ export default function CreatePost() {
           placeholder='Write Something...'
           className='h-72 mb-12'
           required
+          onChange={(value) => setFormData({ ...formData, content: value })}
         ></ReactQuill>
         <Button
           type='submit'
@@ -122,6 +171,15 @@ export default function CreatePost() {
         >
           Publish
         </Button>
+
+        {publishError && (
+          <Alert
+            className='mt-5'
+            color='failure'
+          >
+            {publishError}
+          </Alert>
+        )}
       </form>
     </div>
   );
