@@ -1,4 +1,4 @@
-import { Alert, Button, TextInput, Modal, ModalHeader } from "flowbite-react";
+import { Alert, Button, TextInput, Modal } from "flowbite-react";
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import userAvatar from "../../public/userAvatar.jpg";
