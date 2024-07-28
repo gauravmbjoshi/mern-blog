@@ -12,6 +12,7 @@ import PvcPolc from "./pages/PvcPolc";
 import PrivateRoute from "./components/PrivateRoute";
 import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
 import CreatePost from "./pages/CreatePost";
+import UpdatePost from './pages/UpdatePost';
 function App() {
   return (
     <BrowserRouter>
@@ -44,6 +45,10 @@ function App() {
             exact
             path='/create-post'
             element={<CreatePost />}
+          />
+          <Route
+            path='/update-post/:postId'
+            element={<UpdatePost />}
           />
         </Route>
         <Route

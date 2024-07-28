@@ -62,8 +62,8 @@ export default function DashSidebar() {
             icon={HiArrowSmRight}
             className='cursor-pointer'
             onClick={handleSignOut}
-          >
-            Sign Out
+          ><span>Sign Out</span>
+            
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
