@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from './pages/UpdatePost';
+import PostPage from './pages/PostPage';
 function App() {
   return (
     <BrowserRouter>
@@ -70,6 +71,11 @@ function App() {
           exact
           path='/pvcpolc'
           element={<PvcPolc />}
+        />
+        <Route
+          exact
+          path='/post/:postSlug'
+          element={<PostPage />}
         />
       </Routes>
       <FooterComponent />
