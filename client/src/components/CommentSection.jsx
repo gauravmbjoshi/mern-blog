@@ -78,6 +78,13 @@ useEffect(()=>{
       console.log(error.message);
     }
   };
+  const handleEdit = async (comment,editedContent) => {
+    setComments(comments.map((c)=>
+      c._id===comment._id?{
+        ...c,content:editedContent}:c
+    )
+    );
+  }
   return (
     <div className='max-w-3xl mx-auto w-full my-5 p-3 border rounded border-slate-300'>
       {currentUser ? (
@@ -151,6 +158,7 @@ useEffect(()=>{
               key={comment._id}
               comment={comment}
               onLike={handleLike}
+              onEdit={handleEdit}
             />
           ))}
         </>
